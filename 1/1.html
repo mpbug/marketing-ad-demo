@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测一测你的股票</title>
+    <link rel="stylesheet" href="style.css">
+    <style></style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <div class="container">
+            <div class="top">
+                <span class="texts">
+                    <span class="text-left text-stroke-red sellShares">抛出</span>
+                    <span class="text-mid text-stroke-red holdingShares">持有</span>
+                    <span class="text-right text-stroke-red buyShares">加仓</span>
+                    <span class="spin"></span>
+                </span>
+            </div>
+            <div class="middle">
+                <div type="text"><span class="text-stroke-white inputStock" contenteditable="true">输入股票代码</span></div>
+                <div class="" type="button"><span class="text-stroke-white text-animate-scale testStock"></span></div>
+            </div>
+            <div class="bottom text-stroke-black">
+                <span class="tips1">投资有风险 入市需谨慎</span>
+                <span class="tips2">预测结果仅供参考 请以真实开盘为准</span>
+            </div>
+        </div>
+    </div>
+    <script>
+        let lang = 'en';  // 切换语言  zh / en  中文/英文
+        let i18n = {
+            zh: {
+                sellShares: "抛出",
+                holdingShares: "持有",
+                buyShares: "加仓",
+                inputStock: "输入股票代码",
+                testStock: "测一测你的股票",
+                tips1: "投资有风险 入市需谨慎",
+                tips2: "预测结果仅供参考 请以真实开盘为准"
+            },
+            en: {
+                sellShares: "sell",
+                holdingShares: "holding",
+                buyShares: "buy",
+                inputStock: "Input Stock",
+                testStock: "Test Your Stock",
+                tips1: "Investment is risky. Caution is required when entering the market",
+                tips2: "Predicting results are for reference only."
+            }
+        }
+        let language = i18n[lang];
+        for (const [key, value] of Object.entries(language)) {
+            let dom = document.querySelector('.' + key);
+            dom && (dom.innerText = value);
+        }
+        if (lang == 'en') {
+            let testmid = document.querySelector('.text-mid');
+            testmid.style.left = "calc(50% - 4rem)";
+        }
+        let testStock = document.querySelector('.testStock');
+        let text = language.testStock;
+        testStock.innerHTML = "";
+        for (let index = 0; index < text.length; index++) {
+            const element = text[index];
+            let span = document.createElement('span');
+            span.className = "text-stroke-white text-animate-scale";
+            span.innerText = element;
+            testStock.append(span)
+        }
+        let index = 0;
+        // 文字特效
+        id = setInterval(() => {
+            for (const iterator of testStock.childNodes) {
+                iterator.style.fontSize = "2rem";
+            }
+            const child = testStock.childNodes[index];
+            child && (child.style.fontSize = "2.5rem");
+            if (++index > text.length) index = 0;
+        }, 100);
+        // clearInterval(id)
+        // 指针特效
+        let spin = document.querySelector('.spin');
+        let degs = ["90", "180", "270"];
+        let texts = ["sellShares", "holdingShares", "buyShares"];
+        let indexdeg = 0;
+        let acc = 1;
+        function spinEffect() {
+            //
+            for (const text of texts) {
+                let dom = document.querySelector('.' + text);
+                dom && (dom.style.fontSize = "2.5rem");
+            }
+            let curText = texts[indexdeg];
+            let dom = document.querySelector('.' + curText);
+            dom && (dom.style.fontSize = "3.5rem");
+            //
+            let deg = degs[indexdeg];
+            console.log('~~deg', indexdeg, { deg, spin })
+            spin.style.transform = `rotate(${deg}deg)`;
+            if (indexdeg >= degs.length - 1) acc *= -1;
+            indexdeg += 1 * acc;
+            if (indexdeg < 0) { acc = 1; indexdeg = 1 }
+        }
+        spinEffect();
+        setInterval(spinEffect, 1500);
+    </script>
+</body>
+
+</html>
